@@ -13,14 +13,27 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::group(['prefix' => 'v1/user'], function() {
+	Route::post('register', 'Auth\UserController@register');
+	Route::post('login', 'Auth\UserController@login');
 });
 
+Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1/user'], function() {
+	Route::get('logout', 'Auth\UserController@logout');
+	Route::get('auth', 'Auth\UserController@authTest');
+});
+
+Route::group(['prefix' => 'v1/user'], function() {
+	Route::get('verify/{verification_code}', 'Auth\UserManageController@verifyUser');
+	Route::post('password/reset', 'Auth\UserManageController@resetPassword');
+});
+
+
+// demo crud
 Route::group(['prefix' => 'v1'], function() {
 	Route::get('person', 'Api\PersonController@index');
 	Route::post('person', 'Api\PersonController@store');
 	Route::get('person/{id}', 'Api\PersonController@show');
-	Route::patch('person/{id}', 'Api\PersonController@update');
+	Route::put('person/{id}', 'Api\PersonController@update');
 	Route::delete('person/{id}', 'Api\PersonController@destroy');
 });

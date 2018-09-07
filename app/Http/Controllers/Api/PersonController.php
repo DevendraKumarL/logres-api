@@ -10,6 +10,8 @@ use App\Person;
 
 class PersonController extends Controller
 {
+	// demo crud
+	
 	public function index(Request $request)
 	{
 		return Person::all();
@@ -19,16 +21,16 @@ class PersonController extends Controller
 	{
 		$rules = [
 			'firstname' => 'required',
-	    	'lastname' => 'required',
-	    	'age' => 'required|integer|between:1,100',
-	    	'description' => 'required'
-    	];
+			'lastname' => 'required',
+			'age' => 'required|integer|between:1,100',
+			'description' => 'required'
+		];
 
-    	$validator = Validator($request->all(), $rules);
-    	if ($validator->fails())
-    	{
-    		return response($validator->failed(), 400);
-    	}
+		$validator = Validator($request->all(), $rules);
+		if ($validator->fails())
+		{
+			return response($validator->messages(), 400);
+		}
 
 		$person = Person::create($request->all());
 		return response($person, 201);
@@ -53,7 +55,7 @@ class PersonController extends Controller
 		$validator = Validator($request->all(), $rules);
 		if ($validator->fails())
 		{
-			return response($validator->failed(), 400);
+			return response($validator->messages(), 400);
 		}
 
 		$person = Person::find($id);
@@ -62,7 +64,7 @@ class PersonController extends Controller
 			$person->update($request->all());
 			return response(null, 204);
 		}
-		return response(null, 404);
+		return response($person, 404);
 	}
 
 	public function destroy($id)
@@ -73,6 +75,6 @@ class PersonController extends Controller
 			$person->delete();
 			return response(null, 204);
 		}
-		return response(null, 404);
+		return response($person, 404);
 	}
 }
