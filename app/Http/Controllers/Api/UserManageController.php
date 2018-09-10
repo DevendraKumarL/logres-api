@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Auth;
+namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 
@@ -22,10 +22,10 @@ class UserManageController extends Controller
             return response()->json(['success' => false, 'error' => 'Verification code is required'], 400);
         }
 
-        $check = DB::table('user_verifications')->where('token', $verification_code)->first();
-        if (!is_null($check))
+        $userVerification = DB::table('user_verifications')->where('token', $verification_code)->first();
+        if (! is_null($userVerification))
         {
-            $user = User::find($check->user_id);
+            $user = User::find($userVerification->user_id);
             if ($user->is_verified == 1)
             {
                 return response()->json(['success' => true, 'message' => 'User account already verified']);
@@ -36,10 +36,5 @@ class UserManageController extends Controller
         }
 
         return response()->json(['success' => false, 'error' => 'Invalid verification code'], 400);
-    }
-
-    public function resetPassword(Request $request)
-    {
-        
     }
 }

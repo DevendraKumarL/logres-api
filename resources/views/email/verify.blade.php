@@ -13,7 +13,7 @@
     Please click on the link below or copy it into the address bar of your browser to confirm your email address:
     <br>
 
-    <a href="{{ url('v1/user/manage', $verification_code)}}">Confirm my email address </a>
+    <a href="{{ url('api/v1/user/verify', $verification_code)}}">Confirm my email address </a>
 
     <br/>
 </div>

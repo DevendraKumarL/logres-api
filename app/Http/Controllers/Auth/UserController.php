@@ -39,15 +39,18 @@ class UserController extends Controller
         $verification_code = str_random(30);
         DB::table('user_verifications')->insert(['user_id' => $user->id, 'token' => $verification_code]);
 
-        // $subject = 'Please verify your email address';
-        // Mail::send('email.verify', ['name' => $name, 'verification_code' => $verification_code],
-        //     function ($mail) use ($email, $name, $subject) {
-        //         $mail->from(getenv('MAIL_USERNAME', "|The Batman|"));
-        //         $mail->to($email, $name);
-        //         $mail->subject($subject);
-        //     });
+        $subject = 'logres | Account Verification';
+        Mail::send('email.verify', ['name' => $name, 'verification_code' => $verification_code],
+            function (Message $mail) use ($email, $name, $subject) {
+                $mail->from(getenv('MAIL_USERNAME', 'logres Admin'));
+                $mail->to($email, $name);
+                $mail->subject($subject);
+            });
 
-        return response()->json(['success' => true, 'message' => 'User registration successful. Please verify your email'], 200);
+        return response()->json([
+            'success' => true,
+            'message' => 'User registration successful. Please verify your email'
+        ], 200);
     }
 
     public function login(Request $request)
@@ -68,7 +71,10 @@ class UserController extends Controller
             $crendentials['is_verified'] = 1;
             if (! $token = JWTAuth::attempt($crendentials))
             {
-                return response()->json(['success' => false, 'error' => 'User credentials are invalid or user account email is not verified yet'], 401);
+                return response()->json([
+                    'success' => false,
+                    'error' => 'User credentials are invalid or user account email is not verified yet'
+                ], 401);
             }
         }
         catch(JWTException $e)
