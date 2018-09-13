@@ -24,7 +24,7 @@ Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1/user'], function() {
 });
 
 Route::group(['prefix' => 'v1/user'], function() {
-	Route::get('verify/{verification_code}', 'Api\UserManageController@verifyUser');
+	Route::get('verify', 'Api\UserManageController@verifyUser');
 	Route::post('password/reset/request', 'Api\ResetPasswordController@resetPasswordRequest');
 	Route::post('password/reset', 'Api\ResetPasswordController@resetPassword');
 });

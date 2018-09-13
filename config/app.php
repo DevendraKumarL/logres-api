@@ -181,6 +181,8 @@ return [
 
         Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
 
+        Barryvdh\Cors\ServiceProvider::class,
+
     ],
 
     /*

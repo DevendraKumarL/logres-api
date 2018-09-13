@@ -15,11 +15,13 @@ use Illuminate\Mail\Message;
 
 class UserManageController extends Controller
 {
-    public function verifyUser($verification_code)
+    public function verifyUser(Request $request)
     {
+        $verification_code = $request->get('verification_code');
         if (is_null($verification_code))
         {
-            return response()->json(['success' => false, 'error' => 'Verification code is required'], 400);
+            return view('verifyAccount')->with('data', ['success' => 0, 'message' => 'Verification code is required']);
+
         }
 
         $userVerification = DB::table('user_verifications')->where('token', $verification_code)->first();
@@ -28,13 +30,14 @@ class UserManageController extends Controller
             $user = User::find($userVerification->user_id);
             if ($user->is_verified == 1)
             {
-                return response()->json(['success' => true, 'message' => 'User account already verified']);
+                return view('verifyAccount')->with('data', ['success' => 2, 'message' => 'Your account is already verified']);
+
             }
             $user->update(['is_verified' => 1]);
-            DB::table('user_verifications')->where('token', $verification_code)->delete();
-            return response()->json(['success' => true, 'message' => 'User account verified successfully']);
+            return view('verifyAccount')->with('data', ['success' => 1, 'message' => 'User account verified successfully']);
+
         }
 
-        return response()->json(['success' => false, 'error' => 'Invalid verification code'], 400);
+        return view('verifyAccount')->with('data', ['success' => 0, 'message' => 'Invalid verification code']);
     }
 }

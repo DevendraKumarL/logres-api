@@ -49,7 +49,7 @@ class UserController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'User registration successful. Please verify your email'
+            'message' => 'Registration successful. Please check your email to verify your account'
         ], 200);
     }
 
@@ -65,7 +65,7 @@ class UserController extends Controller
         {
             return response()->json(['success' => false, 'error' => $validator->messages()], 400);
         }
-        
+
         try
         {
             $crendentials['is_verified'] = 1;
