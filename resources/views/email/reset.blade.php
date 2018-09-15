@@ -8,13 +8,9 @@
 <div>
     Hi {{ $name }},
     <br>
-    Below is the code to reset your password:
+    Use the below link to reset your account password:
     <br>
-    Reset code: <b>{{ $reset_code }}</b>
-    <br><br>
-    Use the above code to reset your password from here:
-    <br>
-    <a href="{{ $reset_app_url }}">Reset Password</a>
+    <a href="{{ $reset_app_url.''.$reset_code }}">Reset Password</a>
     <br/>
 </div>
 

@@ -20,12 +20,12 @@ Route::group(['prefix' => 'v1/user'], function() {
 
 Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1/user'], function() {
 	Route::get('logout', 'Auth\UserController@logout');
-	Route::get('auth', 'Auth\UserController@authTest');
+	Route::get('profile', 'Auth\UserController@profile');
 });
 
 Route::group(['prefix' => 'v1/user'], function() {
 	Route::get('verify', 'Api\UserManageController@verifyUser');
-	Route::post('password/reset/request', 'Api\ResetPasswordController@resetPasswordRequest');
+	Route::get('password/reset/request', 'Api\ResetPasswordController@resetPasswordRequest');
 	Route::post('password/reset', 'Api\ResetPasswordController@resetPassword');
 });
 

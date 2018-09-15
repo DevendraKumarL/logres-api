@@ -73,7 +73,7 @@ class UserController extends Controller
             {
                 return response()->json([
                     'success' => false,
-                    'error' => 'User credentials are invalid or user account email is not verified yet'
+                    'error' => 'Login credentials are invalid or user account email is not verified yet'
                 ], 401);
             }
         }
@@ -98,7 +98,7 @@ class UserController extends Controller
         }
     }
 
-    public function authTest(Request $request)
+    public function profile(Request $request)
     {
         $user = JWTAuth::toUser(JWTAuth::getToken());
         return response()->json(['success' => true, 'user' => $user], 200);

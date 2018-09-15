@@ -17,26 +17,22 @@ class ResetPasswordController extends Controller
 {
     public function resetPasswordRequest(Request $request)
     {
-        $email = $request->only('email');
-        $rules = [
-            'email' => 'required|email'
-        ];
-        $validator = Validator::make($email, $rules);
-        if ($validator->fails())
+        $email = $request->get('email');
+        if (is_null($email))
         {
-            return response()->json(['success' => false, 'error' => $validator->messages()]);
+            return response()->json(['success' => false, 'error' => 'Email ID is required']);
         }
 
         $user = User::where('email', $email)->first();
         if (! $user)
         {
-            return response()->json(['success' => false, 'error' => 'Email does not exists'], 404);
+            return response()->json(['success' => false, 'error' => 'That Email ID does not exists'], 400);
         }
 
         $check = DB::table('reset_passwords')->where('user_id', $user->id)->first();
         if (! is_null($check))
         {
-            return response()->json(['success' => false, 'error' => 'An email is already sent to reset your password']);
+            return response()->json(['success' => false, 'error' => 'An email was already sent to reset your password']);
         }
 
         try
@@ -58,7 +54,7 @@ class ResetPasswordController extends Controller
             return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
 
-        return response()->json(['success' => true, 'message' => 'A mail has been sent to your email to reset your password']);
+        return response()->json(['success' => true, 'message' => 'An email has been sent to reset your password']);
     }
 
     public function resetPassword(Request $request)
@@ -85,6 +81,6 @@ class ResetPasswordController extends Controller
             return response()->json(['success' => true, 'message' => 'Your password has been reset successfully']);
         }
 
-        return response()->json(['success' => false, 'error' => 'Invalid reset code'], 400);
+        return response()->json(['success' => false, 'error' => 'Invalid password reset code'], 400);
     }
 }
