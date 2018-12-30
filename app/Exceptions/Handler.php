@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use Exception;
+use JWTAuth;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 
 class Handler extends ExceptionHandler
@@ -48,26 +49,6 @@ class Handler extends ExceptionHandler
      */
     public function render($request, Exception $exception)
     {
-        if ($exception instanceof \Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException)
-        {
-            switch(get_class($exception->getPrevious()))
-            {
-                case \Tymon\JWTAuth\Exceptions\TokenExpiredException::class:
-                    return response()->json([
-                        'succcess' => false, 'error' => 'Token has expired'
-                    ], $exception->getStatusCode());
-                case \Tymon\JWTAuth\Exceptions\TokenInvalidException::class:
-                case \Tymon\JWTAuth\Exceptions\TokenBlacklistedException::class:
-                    return response()->json([
-                        'success' => false, 'error' => 'Token is invalid'
-                    ], $exception->getStatusCode());
-                default:
-                    return response()->json([
-                    'success' => false, 'error' => 'Token not found'
-                    ], $exception->getStatusCode());
-            }
-        }
-        
         return parent::render($request, $exception);
     }
 }

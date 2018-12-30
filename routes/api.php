@@ -18,9 +18,12 @@ Route::group(['prefix' => 'v1/user'], function() {
 	Route::post('login', 'Auth\UserController@login');
 });
 
-Route::group(['middleware' => ['jwt.auth'], 'prefix' => 'v1/user'], function() {
+Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1/user'], function() {
 	Route::get('logout', 'Auth\UserController@logout');
 	Route::get('profile', 'Auth\UserController@profile');
+	Route::get('auth', function() {
+		return response()->json(['success' => true]);
+	});
 });
 
 Route::group(['prefix' => 'v1/user'], function() {
