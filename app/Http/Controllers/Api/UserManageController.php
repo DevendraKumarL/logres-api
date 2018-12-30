@@ -40,4 +40,14 @@ class UserManageController extends Controller
 
         return view('verifyAccount')->with('data', ['success' => 0, 'message' => 'Invalid verification code']);
     }
+
+    public function search(Request $request)
+    {
+        $query = $request->get('query');
+        if ($query == '' || $query == ' ') {
+            return response()->json(['data' => null]);
+        }
+        $rows = DB::table('users')->select('name')->where('name', 'like', '%'.$query.'%')->take(5)->get();
+        return response()->json(['data' => count($rows) == 0 ? null : $rows]);
+    }
 }

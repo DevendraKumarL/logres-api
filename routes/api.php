@@ -16,6 +16,10 @@ use Illuminate\Http\Request;
 Route::group(['prefix' => 'v1/user'], function() {
 	Route::post('register', 'Auth\UserController@register');
 	Route::post('login', 'Auth\UserController@login');
+	Route::get('verify', 'Api\UserManageController@verifyUser');
+	Route::get('password/reset/request', 'Api\ResetPasswordController@resetPasswordRequest');
+	Route::post('password/reset', 'Api\ResetPasswordController@resetPassword');
+	Route::get('search', 'Api\UserManageController@search');
 });
 
 Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1/user'], function() {
@@ -25,13 +29,6 @@ Route::group(['middleware' => ['jwt.verify'], 'prefix' => 'v1/user'], function()
 		return response()->json(['success' => true]);
 	});
 });
-
-Route::group(['prefix' => 'v1/user'], function() {
-	Route::get('verify', 'Api\UserManageController@verifyUser');
-	Route::get('password/reset/request', 'Api\ResetPasswordController@resetPasswordRequest');
-	Route::post('password/reset', 'Api\ResetPasswordController@resetPassword');
-});
-
 
 // demo crud
 Route::group(['prefix' => 'v1'], function() {
